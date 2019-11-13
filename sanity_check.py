@@ -7,6 +7,9 @@ sanity_check.py: sanity checks for assignment 5
 Usage:
     sanity_check.py 1a
     sanity_check.py 1b
+    sanity_check.py 1c
+    sanity_check.py 1d
+    sanity_check.py 1e
     sanity_check.py 1f
     sanity_check.py 2a
     sanity_check.py 2b
@@ -26,6 +29,8 @@ from char_decoder import CharDecoder
 from nmt_model import NMT
 from utils import pad_sents_char
 from vocab import Vocab, VocabEntry
+from highway import Highway
+from cnn import CNN
 
 # ----------
 # CONSTANTS
@@ -100,6 +105,70 @@ def question_1b_sanity_check():
     print("Sanity Check Passed for Question 1b: Padding!")
     print("-" * 80)
 
+def question_1c_sanity_check():
+    """ Sanity check for to_input_tensor_char failed function.
+    """
+    print("-" * 80)
+    print("Running Sanity Check for Question 1c: Tensors")
+    print("-" * 80)
+    vocab = VocabEntry()
+
+    print("Running test on a list of sentences")
+    sentences = [['Human:', 'What', 'do', 'we', 'want?'], ['Computer:', 'Natural', 'language', 'processing!'],
+                 ['Human:', 'When', 'do', 'we', 'want', 'it?'], ['Computer:', 'When', 'do', 'we', 'want', 'what?']]
+    word_ids = vocab.words2charindices(sentences)
+
+    padded_sentences = pad_sents_char(word_ids, 0)
+    new_vocab = VocabEntry()
+    output = new_vocab.to_input_tensor_char(sentences, torch.device('cpu'))
+    expected_output_size = [6, 4, 21]
+    assert list(output.size()) == expected_output_size, 'tensor size is not correct :\n expected {} but is :\n{}'.format(
+        expected_output_size, list(output.size()))
+    
+    print('Sanity check for Question 1c: passed')
+    print('-'*80)
+    
+
+
+    
+def question_1d_sanity_check():
+    """ Basic Sanity check for the Highway network
+    """
+    print("-" * 80)
+    print("Running Sanity Check for Question 1d: Highway model")
+    print("-" * 80)
+    num_batches = 20
+    batch_size = 5
+    embedding_size = 10
+    dummy_x_conv = torch.ones([batch_size, embedding_size])
+    highway_layer =  Highway(embedding_size)
+    output = highway_layer.forward(dummy_x_conv)
+    expected_shape = [batch_size, embedding_size]
+    assert list(output.size())== expected_shape, 'sanity check for dimensions failed :\n expected {} but is :\n{}'.format(
+        output.size(), list(output.size())
+    )
+    print('Dimension size check passed for 1d')
+    print("-" * 80)
+
+def question_1e_sanity_check():
+    """ Basic Sanity check for the CNN
+    """
+    print("-" * 80)
+    print("Running Sanity Check for Question 1e:CNN")
+    print("-" * 80)
+    max_len_sentence = 21
+    batch_size = 5
+    embedding_size = 50
+    dummy_x_conv = torch.ones([max_len_sentence, batch_size, embedding_size])
+    dummy_x_conv = dummy_x_conv.permute([1,0,2])
+    cnn =  CNN()
+    output = cnn.forward(dummy_x_conv)
+    expected_shape = [batch_size, embedding_size]
+    assert list(output.size())== expected_shape, 'sanity check for dimensions failed :\n expected {} but is :\n{}'.format(
+        expected_shape, list(output.size())
+    )
+    print('Dimension size check passed for 1e')
+    print("-" * 80)
 
 def question_1f_sanity_check(model):
     """ Sanity check for model_embeddings.py
@@ -246,6 +315,12 @@ def main():
         question_1a_sanity_check()
     elif args['1b']:
         question_1b_sanity_check()
+    elif args['1c']:
+        question_1c_sanity_check()
+    elif args['1d']:
+        question_1d_sanity_check()
+    elif args['1e']:
+        question_1e_sanity_check()
     elif args['1f']:
         question_1f_sanity_check(model)
     elif args['2a']:
