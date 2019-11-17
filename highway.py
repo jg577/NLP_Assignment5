@@ -48,14 +48,12 @@ class Highway(nn.Module):
             rest of the model
 
         """    
-        torch.set_default_tensor_type(torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor) 
         x_proj = F.relu(self.T(x_conv_out))
         x_gate = torch.sigmoid(self.C(x_conv_out))
         units = torch.ones(self.embedding_size)
-        x_highway = torch.mul(x_gate, x_proj) + torch.mul((units-x_gate),x_conv_out)
+        x_highway = torch.sum([torch.mul(x_gate, x_proj),torch.mul((units-x_gate),x_conv_out)])
         return x_highway
         
-         
 
 
 ### END YOUR CODE 
