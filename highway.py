@@ -47,7 +47,8 @@ class Highway(nn.Module):
             that will be used at the embedding vector for the word eventually for 
             rest of the model
 
-        """     
+        """    
+        torch.set_default_tensor_type(torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor) 
         x_proj = F.relu(self.T(x_conv_out))
         x_gate = torch.sigmoid(self.C(x_conv_out))
         units = torch.ones(self.embedding_size)

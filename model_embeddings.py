@@ -5,7 +5,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 from highway import Highway
 from cnn import CNN
-import torch
 
 
 # Do not change these imports; your module names should be
@@ -34,7 +33,6 @@ class ModelEmbeddings(nn.Module):
         # pad_token_idx = vocab.src['<pad>']
         # self.embeddings = nn.Embedding(len(vocab.src), embed_size, padding_idx=pad_token_idx)
         ## End A4 code
-        torch.set_default_tensor_type(torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor)
         ### YOUR CODE HERE for part 1f
         self.embed_size = embed_size
         self.vocab = vocab
