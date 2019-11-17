@@ -68,6 +68,7 @@ class ModelEmbeddings(nn.Module):
         x_highway = self.highway_layer(x_conv)
         x_word_emb = self.dropout_layer(x_highway)
         x_word_view = x_word_emb.view([sentence_length, batch_size, self.embed_size])
+        
         return x_word_view
         
         
