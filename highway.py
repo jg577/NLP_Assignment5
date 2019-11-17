@@ -33,6 +33,7 @@ class Highway(nn.Module):
         self.C = nn.Linear(in_features=self.embedding_size,
                            out_features=self.embedding_size,
                            bias=True)
+        self.device = device
         
     # quite not sure if we want a tensor as an input, probably though
     #implement batches
@@ -50,7 +51,7 @@ class Highway(nn.Module):
         """    
         x_proj = F.relu(self.T(x_conv_out))
         x_gate = torch.sigmoid(self.C(x_conv_out))
-        units = torch.ones(self.embedding_size)
+        units = torch.ones(self.embedding_size, device=self.device)
         x_highway = torch.sum([torch.mul(x_gate, x_proj),torch.mul((units-x_gate),x_conv_out)])
         return x_highway
         
