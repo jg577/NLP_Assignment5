@@ -16,7 +16,7 @@ class Highway(nn.Module):
         - Two linear layers
     """
     
-    def __init__(self, embed_size, dropout_rate=0.3):
+    def __init__(self, embed_size, dropout_rate=0.3, device=None):
         """ Init Highway model
         
         @param embed_size: Embedding size of each word(dimensionality)
