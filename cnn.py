@@ -10,7 +10,7 @@ import torch.nn.utils
 ### YOUR CODE HERE for part 1e
 class CNN(nn.Module):
     
-    def __init__(self, filters=50, kernel_size=3, max_words=21):
+    def __init__(self, filters=50, kernel_size=5, max_words=21):
         """
         Instantiates a one layer convolution layer.
         

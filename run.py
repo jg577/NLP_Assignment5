@@ -301,6 +301,7 @@ def beam_search(model: NMT, test_data_src: List[List[str]], beam_size: int, max_
     was_training = model.training
     model.eval()
 
+
     hypotheses = []
     with torch.no_grad():
         for src_sent in tqdm(test_data_src, desc='Decoding', file=sys.stdout):

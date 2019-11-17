@@ -45,7 +45,6 @@ class CharDecoder(nn.Module):
         ### YOUR CODE HERE for part 2b
         ### TODO - Implement the forward pass of the character decoder.
         X = self.decoderCharEmb(input)
-        # import pdb; pdb.set_trace()
         dec_hidden, (h_t, c_t) = self.charDecoder(X,dec_hidden)
         s_t = self.char_output_projection(dec_hidden)
         return s_t, (h_t, c_t)
@@ -128,7 +127,8 @@ class CharDecoder(nn.Module):
         for t in range(0, max_length):
             embedding_chars = self.decoderCharEmb(current_char_index)
             output, (h_t, c_t) = self.charDecoder(embedding_chars, (h_t, c_t))
-            p_val = nn.functional.softmax(output)
+            linear = self.char_output_projection(output)
+            p_val = nn.functional.softmax(linear, dim=2)
             current_char_index = torch.argmax(p_val, dim=-1, keepdim=False)
             output_words += [current_char_index]
         output_words = torch.cat(output_words, dim=0).t()
