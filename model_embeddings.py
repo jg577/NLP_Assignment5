@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from highway import Highway
 from cnn import CNN
+import torch
 
 
 # Do not change these imports; your module names should be
