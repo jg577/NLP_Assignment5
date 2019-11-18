@@ -52,10 +52,9 @@ class Highway(nn.Module):
         device = self.C.weight.device
         x_proj = F.relu(self.T(x_conv_out))
         x_gate = torch.sigmoid(self.C(x_conv_out))
-        import pdb; pdb.set_trace()
         units = torch.ones(self.embedding_size, device=device)
         diff = torch.add(units, torch.neg(x_gate))
-        x_highway = torch.add(torch.mm(x_gate, x_proj),torch.mm(diff,x_conv_out))
+        x_highway = torch.add(torch.mul(x_gate, x_proj),torch.mul(diff,x_conv_out))
         return x_highway
         
 
