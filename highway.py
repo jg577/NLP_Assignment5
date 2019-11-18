@@ -33,7 +33,7 @@ class Highway(nn.Module):
         self.C = nn.Linear(in_features=self.embedding_size,
                            out_features=self.embedding_size,
                            bias=True)
-        self.device = device
+        
         
     # quite not sure if we want a tensor as an input, probably though
     #implement batches
@@ -49,10 +49,11 @@ class Highway(nn.Module):
             rest of the model
 
         """    
+        device = self.C.weight.device
         x_proj = F.relu(self.T(x_conv_out))
         x_gate = torch.sigmoid(self.C(x_conv_out))
         import pdb; pdb.set_trace()
-        units = torch.ones(self.embedding_size)
+        units = torch.ones(self.embedding_size, device=device)
         diff = torch.add(units, torch.neg(x_gate))
         x_highway = torch.add(torch.mm(x_gate, x_proj),torch.mm(diff,x_conv_out))
         return x_highway
