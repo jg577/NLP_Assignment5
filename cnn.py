@@ -17,10 +17,10 @@ class CNN(nn.Module):
         @params kernel_size: number of kernel sizes
         """
         super(CNN, self).__init__()
-        self.k = kernel_size
+        self.k = min(kernel_size, filters)
         self.m_word = max_words
         self.f = filters
-        self.conv1d = nn.Conv1d(in_channels=self.m_word,
+        self.conv1d = nn.Conv1d(in_channels=self.f,
                                out_channels=self.f,
                                kernel_size=self.k)
     

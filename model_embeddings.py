@@ -36,11 +36,11 @@ class ModelEmbeddings(nn.Module):
         ### YOUR CODE HERE for part 1f
         self.embed_size = embed_size
         self.vocab = vocab
-        self.cnn_layer = CNN(filters=embed_size)
+        self.cnn_layer = CNN(filters=self.embed_size)
         self.highway_layer = Highway(embed_size=self.embed_size)
         self.dropout_layer = nn.Dropout(p=0.3)
         pad_token_idx = vocab.char2id['<pad>']
-        self.embedding = nn.Embedding(len(vocab.char2id),self.embed_size, padding_idx=pad_token_idx)
+        self.embedding = nn.Embedding(len(vocab.char2id), self.embed_size, padding_idx=pad_token_idx)
 
 
         ### END YOUR CODE
@@ -62,7 +62,7 @@ class ModelEmbeddings(nn.Module):
         ### YOUR CODE HERE for part 1f
         sentence_length, batch_size, max_word_length = list(input.shape)
         embeddings = self.embedding(input)
-        new_view = embeddings.view([sentence_length*batch_size, max_word_length, self.embed_size])
+        new_view = embeddings.view([sentence_length*batch_size, self.embed_size, max_word_length])
         x_conv = self.cnn_layer(new_view)
         x_highway = self.highway_layer(x_conv)
         x_word_emb = self.dropout_layer(x_highway)
